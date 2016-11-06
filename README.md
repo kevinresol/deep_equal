@@ -22,10 +22,11 @@ switch DeepEqual.compare(expected, actual) {
 
 By default, string, bool, Int, float, date, bytes, int64, array, objects, class instances,
 enum values, class/enum objects (`Class<T>/Enum<T>`) are recursively compared by value.
-In case more advanced comparison is needed, one can implement the `CustomCompare`
-interface and put it as the expected value.
+In case more advanced comparison (such as partial equals, regex checks, etc) is needed, 
+one can implement the `CustomCompare` interface and put it as the expected value.
 
-Example:
+The following shows an example on checking if an array contains some required elements,
+while not necessarily the same length as the required elements.
 
 ```haxe
 
