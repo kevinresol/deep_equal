@@ -1,0 +1,15 @@
+{
+  "name": "deep-equal",
+  "license": "MIT",
+  "tags": [
+    "deep equal",
+    "compare"
+  ],
+  "classPath": "src",
+  "contributors": [
+    "kevinresol"
+  ],
+  "releasenote": "initial release",
+  "version": "0.0.0",
+  "dependencies": {}
+}
