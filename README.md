@@ -1,4 +1,4 @@
-# Deep Equal
+# Deep Equal [![Build Status](https://travis-ci.org/kevinresol/deep_equal.svg?branch=master)](https://travis-ci.org/kevinresol/deep-equal)
 
 Every programmer needs to compare values.
 
