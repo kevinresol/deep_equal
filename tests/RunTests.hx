@@ -2,8 +2,11 @@ package ;
 
 import haxe.unit.*;
 import haxe.Int64;
+import haxe.io.Bytes;
 import deepequal.DeepEqual.*;
-using tink.CoreApi;
+import deepequal.Outcome;
+import deepequal.Noise;
+import deepequal.Error;
 
 class RunTests extends TestCase {
 
@@ -164,6 +167,27 @@ class RunTests extends TestCase {
 		assertFailure(compare(e, a));
 	}
 	
+	function testBytes() {
+		
+		var a = Bytes.alloc(10);
+		var e = Bytes.alloc(10);
+		assertSuccess(compare(e, a));
+		
+		var a = Bytes.ofString('abc');
+		var e = Bytes.ofString('abc');
+		assertSuccess(compare(e, a));
+		
+		var a = Bytes.alloc(10);
+		var e = Bytes.alloc(20);
+		assertFailure(compare(e, a));
+		
+		var a = Bytes.ofString('abc');
+		var e = Bytes.ofString('def');
+		assertFailure(compare(e, a));
+		
+		
+	}
+	
 	function testClassObj() {
 		var a = Foo;
 		var e = Foo;
@@ -195,7 +219,7 @@ class RunTests extends TestCase {
 		switch outcome {
 			case Failure(f) if(message == null): assertTrue(true, pos);
 			case Failure(f): assertEquals(message, f.message, pos);
-			case Success(e): assertTrue(true, pos);
+			case Success(e): assertTrue(false, pos);
 		}
 	}
 }

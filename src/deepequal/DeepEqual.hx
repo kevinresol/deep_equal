@@ -1,8 +1,10 @@
 package deepequal;
 
 import haxe.Int64;
-
-using tink.CoreApi;
+import haxe.io.Bytes;
+import deepequal.Outcome;
+import deepequal.Noise;
+import deepequal.Error;
 
 class DeepEqual {
 	public static function compare(e:Dynamic, a:Dynamic, ?pos:haxe.PosInfos) {
@@ -16,13 +18,27 @@ class DeepEqual {
 	}
 	static function _compare(e:Dynamic, a:Dynamic, ?pos:haxe.PosInfos) {
 		
-		if(Std.is(e, CustomCompare)) {
+		if(e == null) {
+			
+			return simple(e, a);
+			
+		} else if(Std.is(e, CustomCompare)) {
 			
 			return (e:CustomCompare).check(a, _compare.bind(_, _, pos));
 			
 		} else if(Std.is(e, String)) {
 			
 			if(!Std.is(a, String)) return fail('Expected string but got $a', pos);
+			return simple(e, a);
+			
+		} else if(Std.is(e, Float)) {
+			
+			if(!Std.is(a, Float)) return fail('Expected string but got $a', pos);
+			return simple(e, a);
+			
+		} else if(Std.is(e, Bool)) {
+			
+			if(!Std.is(a, Bool)) return fail('Expected string but got $a', pos);
 			return simple(e, a);
 			
 		} else if(Std.is(e, Date)) {
@@ -61,14 +77,24 @@ class DeepEqual {
 			} 
 			return _compare(a.getParameters(), e.getParameters(), pos);
 			
+		} else if(Std.is(e, Bytes)) {
+			
+			var e:Bytes = e;
+			var a:Bytes = a;
+			if(e.length != a.length) return fail('Expected bytes of length ${e.length} but got ${a.length}', pos);
+			for(i in 0...e.length) if(e.get(i) != a.get(i)) return fail('Expected bytes ${e.toHex()} but got ${a.toHex()}', pos);
+			return success();
+			
 		} else if(Type.getClass(e) != null) {
 			
 			var ecls = Type.getClass(e);
 			var acls = Type.getClass(a);
-			if(ecls != acls)  return fail('Expected class instance of ${Type.getClassName(ecls)} but got $a', pos);
-			for(key in Reflect.fields(e)) switch _compare(Reflect.getProperty(e, key), Reflect.getProperty(a, key), pos) {
-				case Failure(f): return fail(f.message, pos);
-				default:
+			if(ecls != acls) return fail('Expected class instance of ${Type.getClassName(ecls)} but got $a', pos);
+			for(key in Type.getInstanceFields(ecls)) {
+				switch _compare(Reflect.getProperty(e, key), Reflect.getProperty(a, key), pos) {
+					case Failure(f): return fail(f.message, pos);
+					default:
+				}
 			}
 			return success();
 			
@@ -98,7 +124,7 @@ class DeepEqual {
 			
 		} else {
 			
-			return simple(e, a);
+			throw 'Unhandled case'; // if anyone reaches this block, please file an issue
 			
 		}
 	}

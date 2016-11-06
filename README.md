@@ -20,9 +20,10 @@ switch DeepEqual.compare(expected, actual) {
 
 ## Advanced Usage
 
-By default, String, Bool, Int, Float, Date, Int64, Array and Objects are recursively compared by value,
-anything else will be compared by reference.
-In case more advanced comparison is needed, one can implement the `CustomCompare` interface and supply it as the expected value.
+By default, String, Bool, Int, Float, Date, Int64, Array, objects, class instances,
+enum values, Class/Enum objects (`Class<T>/Enum<T>`) are recursively compared by value.
+In case more advanced comparison is needed, one can implement the `CustomCompare`
+interface and put it as the expected value.
 
 Example:
 
