@@ -115,16 +115,16 @@ class RunTests extends TestCase {
 	}
 	
 	function testEnum() {
-		var a:Outcome<String, String> = Success('foo');
-		var e:Outcome<String, String> = Success('foo');
+		var a = Success('foo');
+		var e = Success('foo');
 		assertSuccess(compare(e, a));
 		
-		var a:Outcome<String, String> = Success('foo');
-		var e:Outcome<String, String> = Success('f');
+		var a = Success('foo');
+		var e = Success('f');
 		assertFailure(compare(e, a));
 		
-		var a:Outcome<String, String> = Success('foo');
-		var e:Outcome<String, String> = Failure('foo');
+		var a = Success('foo');
+		var e = Failure('foo');
 		assertFailure(compare(e, a));
 	}
 	
@@ -132,9 +132,35 @@ class RunTests extends TestCase {
 		var a = [1,2,3,4];
 		var e = new ArrayContains([1,2,3]);
 		assertSuccess(compare(e, a));
-		
+
 		var a = [1,2,3,4];
 		var e = new ArrayContains([3,5]);
+		assertFailure(compare(e, a));
+	}
+	
+	function testClass() {
+		var a = new Foo(1);
+		var e = new Foo(1);
+		assertSuccess(compare(e, a));
+		
+		var a = new Foo({a: 1});
+		var e = new Foo({a: 1});
+		assertSuccess(compare(e, a));
+		
+		var a = new Foo(([1, 'a']:Array<Dynamic>));
+		var e = new Foo(([1, 'a']:Array<Dynamic>));
+		assertSuccess(compare(e, a));
+
+		var a = new Foo(1);
+		var e = new Foo(2);
+		assertFailure(compare(e, a));
+		
+		var a = new Foo(1);
+		var e = new Bar(1);
+		assertFailure(compare(e, a));
+		
+		var a = new Foo(1);
+		var e = new Bar(2);
 		assertFailure(compare(e, a));
 	}
 	
@@ -151,6 +177,19 @@ class RunTests extends TestCase {
 			case Failure(f): assertEquals(message, f.message, pos);
 			case Success(e): assertTrue(true, pos);
 		}
+	}
+}
+
+class Foo<T> {
+	var value:T;
+	public function new(v:T) {
+		value = v;
+	}
+}
+class Bar<T> {
+	var value:T;
+	public function new(v:T) {
+		value = v;
 	}
 }
 

@@ -61,6 +61,16 @@ class DeepEqual {
 			} 
 			return _compare(a.getParameters(), e.getParameters(), pos);
 			
+		} else if(Type.getClass(e) != null) {
+			var ecls = Type.getClass(e);
+			var acls = Type.getClass(a);
+			if(ecls != acls)  return fail('Expected class instance of ${Type.getClassName(ecls)} but got $a', pos);
+			for(key in Reflect.fields(e)) switch _compare(Reflect.getProperty(e, key), Reflect.getProperty(a, key), pos) {
+				case Failure(f): return fail(f.message, pos);
+				default:
+			}
+			return success();
+			
 		} else if(Reflect.isObject(e)) {
 			
 			if(!Reflect.isObject(a)) return fail('Expected object but got $a', pos);
