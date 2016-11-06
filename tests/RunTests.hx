@@ -235,19 +235,19 @@ class RunTests extends TestCase {
 	
 	function testAnything() {
 		var a = null;
-		var e = Anything.instance;
+		var e = new Anything();
 		assertSuccess(compare(e, a));
 
 		var a = [1,2,3,4];
-		var e = Anything.instance;
+		var e = new Anything();
 		assertSuccess(compare(e, a));
 		
 		var a = [1,2,3,4];
-		var e = [for(i in 0...4) Anything.instance]; // essentially same as ArrayLength
+		var e = [for(i in 0...4) new Anything()]; // essentially same as ArrayLength
 		assertSuccess(compare(e, a));
 		
 		var a = [1,2,3];
-		var e = [for(i in 0...4) Anything.instance]; // essentially same as ArrayLength
+		var e = [for(i in 0...4) new Anything()]; // essentially same as ArrayLength
 		assertFailure(compare(e, a));
 	}
 	
