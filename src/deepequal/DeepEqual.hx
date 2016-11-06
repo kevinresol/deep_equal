@@ -2,77 +2,97 @@ package deepequal;
 
 import haxe.Int64;
 
-typedef Custom = {
-	cond: Dynamic->Dynamic->Bool,
-	check: Dynamic->Dynamic->Void,
-}
+using tink.CoreApi;
 
 class DeepEqual {
-	public static function compare(e:Dynamic, a:Dynamic, ?custom:Array<Custom>, ?pos:haxe.PosInfos) {
-		
-		if(custom != null) for(c in custom) if(c.cond(e, a)) {
-			c.check(e, a);
-			return;	
+	public static function compare(e:Dynamic, a:Dynamic, ?pos:haxe.PosInfos) {
+		return switch _compare(e, a, pos) {
+			case Failure(f):
+				// display a top-level message together with the internal comparison result
+				Failure(Error.withData('Expected $e but got $a', f.message, pos));
+			case Success(s):
+				Success(s);
 		}
+	}
+	static function _compare(e:Dynamic, a:Dynamic, ?pos:haxe.PosInfos) {
 		
-		if(Std.is(a, String)) {
+		if(Std.is(e, CustomCompare)) {
 			
-			if(!Std.is(e, String)) fail('$e is not string', pos);
-			simple(e, a);
+			return (e:CustomCompare).check(a, _compare.bind(_, _, pos));
 			
-		} else if(Std.is(a, Date)) {
+		} else if(Std.is(e, String)) {
 			
-			if(!Std.is(e, Date)) fail('$e is not date', pos);
-			var e:Date = cast e;
-			var a:Date = cast a;
-			date(e, a, pos);
+			if(!Std.is(a, String)) return fail('Expected string but got $a', pos);
+			return simple(e, a);
 			
-		} else if (Std.is(a, Array)) {
+		} else if(Std.is(e, Date)) {
 			
-			if(!Std.is(e, Array)) fail('$e is not array', pos);
-			if(a.length != e.length) fail('not same length', pos);
-			for(i in 0...a.length) compare(e[i], a[i], custom);
+			if(!Std.is(a, Date)) return fail('Expected date but got $a', pos);
+			return date(e, a, pos);
 			
-		} else if(Int64.is(a)) {
+		} else if (Std.is(e, Array)) {
+			
+			if(!Std.is(a, Array)) return fail('Expected array but got $e', pos);
+			if(a.length != e.length) return fail('Expected array of length ${e.length} but got ${a.length}', pos);
+			for(i in 0...a.length) switch _compare(e[i], a[i]) {
+				case Success(_):
+				case Failure(e): return fail(e.message + ' at index $i');
+			}
+			return success();
+			
+		} else if(Int64.is(e)) {
 			
 			#if !java
-			if(!Int64.is(e)) fail('$e is not int64', pos);
+			if(!Int64.is(a)) return fail('Expected int64 but got $a', pos);
 			#end
-			var a:Int64 = cast a;
-			var e:Int64 = cast e;
-			bool(e == a);
+			return bool((e:Int64) == (a:Int64));
 			
-		} else if(Reflect.isEnumValue(a)) {
+		} else if(Reflect.isEnumValue(e)) {
 		
-			if(!Reflect.isEnumValue(e)) fail('$e is not enum', pos);
+			if(!Reflect.isEnumValue(a)) return fail('Expected enum value but got $a', pos);
 			var a:EnumValue = cast a;
 			var e:EnumValue = cast e;
-			if(a.getIndex() != e.getIndex()) fail('not same constructor');
-			compare(a.getParameters(), e.getParameters(), custom, pos);
+			var type = Type.getEnum(e);
+			if(!Std.is(a, type)) return fail('Expected ${Type.getEnumName(type)} but got $a', pos);
 			
-		} else if(Reflect.isObject(a)) {
+			switch [e.getName(), a.getName()] {
+				case [e, a] if(e != a): return fail('Expected $e but got $a');
+				default:
+			} 
+			return _compare(a.getParameters(), e.getParameters(), pos);
 			
-			if(!Reflect.isObject(e)) fail('$e is not object', pos);
+		} else if(Reflect.isObject(e)) {
+			
+			if(!Reflect.isObject(a)) return fail('Expected object but got $a', pos);
 			var keys = Reflect.fields(a);
-			
-			if(keys.length != Reflect.fields(e).length) fail('not same number of keys', pos);
-			for(key in keys) compare(Reflect.field(e, key), Reflect.field(a, key), custom);
+			switch Reflect.fields(e).length {
+				case len if(len != keys.length): return fail('Expected ${keys.length} field(s) but got $len', pos);
+				default:
+			} 
+			for(key in keys) switch _compare(Reflect.field(e, key), Reflect.field(a, key), pos) {
+				case Failure(f): return fail(f.message, pos);
+				default:
+			}
+			return success();
 			
 		} else {
 			
-			simple(e, a);
+			return simple(e, a);
 			
 		}
 	}
 	
+	static function success()
+		return Success(Noise);
+	
 	static function fail(msg:String, ?pos:haxe.PosInfos)
-		throw msg;
+		return Failure(new Error(msg, pos));
 	
 	static function bool(b:Bool, ?pos:haxe.PosInfos)
-		if(!b) fail('Expected true but got false', pos);
+		return b ? success() : fail('Expected true but got false', pos);
 		
 	static function simple<T>(e:T, a:T, ?pos:haxe.PosInfos)
-		if(e != a) fail('Expected $e but got $a', pos);
+		return e == a ? success() : fail('Expected $e but got $a', pos);
 	
 	static function date(e:Date, a:Date, ?pos:haxe.PosInfos) {
 		return simple(
