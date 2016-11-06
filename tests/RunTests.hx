@@ -164,6 +164,26 @@ class RunTests extends TestCase {
 		assertFailure(compare(e, a));
 	}
 	
+	function testClassObj() {
+		var a = Foo;
+		var e = Foo;
+		assertSuccess(compare(e, a));
+		
+		var a = Foo;
+		var e = Bar;
+		assertFailure(compare(e, a));
+	}
+	
+	function testEnumObj() {
+		var a = Outcome;
+		var e = Outcome;
+		assertSuccess(compare(e, a));
+		
+		var a = Outcome;
+		var e = haxe.ds.Option;
+		assertFailure(compare(e, a));
+	}
+	
 	function assertSuccess(outcome:Outcome<Noise, Error>, ?pos:haxe.PosInfos) {
 		switch outcome {
 			case Success(_): assertTrue(true, pos);

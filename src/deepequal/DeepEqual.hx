@@ -62,6 +62,7 @@ class DeepEqual {
 			return _compare(a.getParameters(), e.getParameters(), pos);
 			
 		} else if(Type.getClass(e) != null) {
+			
 			var ecls = Type.getClass(e);
 			var acls = Type.getClass(a);
 			if(ecls != acls)  return fail('Expected class instance of ${Type.getClassName(ecls)} but got $a', pos);
@@ -70,6 +71,16 @@ class DeepEqual {
 				default:
 			}
 			return success();
+			
+		} else if(Std.is(e, Class)) {
+			
+			if(!Std.is(a, Class)) return fail('Expected $e but got $a', pos);
+			return simple(e, a, pos);
+			
+		} else if(Std.is(e, Enum)) {
+			
+			if(!Std.is(a, Enum)) return fail('Expected $e but got $a', pos);
+			return simple(e, a, pos);
 			
 		} else if(Reflect.isObject(e)) {
 			
