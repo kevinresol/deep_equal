@@ -1,15 +1,16 @@
 {
-  "name": "deep-equal",
+  "name": "deep_equal",
   "license": "MIT",
   "tags": [
     "deep equal",
     "compare"
   ],
+  "description": "Recursive comparison-by-value helper",
   "classPath": "src",
   "contributors": [
     "kevinresol"
   ],
-  "releasenote": "initial release",
-  "version": "0.0.0",
+  "releasenote": "Initial release",
+  "version": "0.1.0",
   "dependencies": {}
 }
