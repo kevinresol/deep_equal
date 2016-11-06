@@ -20,8 +20,8 @@ switch DeepEqual.compare(expected, actual) {
 
 ## Advanced Usage
 
-By default, String, Bool, Int, Float, Date, Int64, Array, objects, class instances,
-enum values, Class/Enum objects (`Class<T>/Enum<T>`) are recursively compared by value.
+By default, string, bool, Int, float, date, bytes, int64, array, objects, class instances,
+enum values, class/enum objects (`Class<T>/Enum<T>`) are recursively compared by value.
 In case more advanced comparison is needed, one can implement the `CustomCompare`
 interface and put it as the expected value.
 
