@@ -3,7 +3,8 @@ package ;
 import haxe.unit.*;
 import haxe.Int64;
 import haxe.io.Bytes;
-import deepequal.DeepEqual.*;
+import deepequal.custom.*;
+import deepequal.DeepEqual.compare;
 import deepequal.Outcome;
 import deepequal.Noise;
 import deepequal.Error;
@@ -135,16 +136,6 @@ class RunTests extends TestCase {
 		assertFailure(compare(e, a));
 	}
 	
-	function testCustom() {
-		var a = [1,2,3,4];
-		var e = new ArrayContains([1,2,3]);
-		assertSuccess(compare(e, a));
-
-		var a = [1,2,3,4];
-		var e = new ArrayContains([3,5]);
-		assertFailure(compare(e, a));
-	}
-	
 	function testClass() {
 		var a = new Foo(1);
 		var e = new Foo(1);
@@ -212,6 +203,46 @@ class RunTests extends TestCase {
 		assertFailure(compare(e, a));
 	}
 	
+	function testArrayContains() {
+		var a = [1,2,3,4];
+		var e = new ArrayContains([1,2,3]);
+		assertSuccess(compare(e, a));
+
+		var a = [1,2,3,4];
+		var e = new ArrayContains([3,5]);
+		assertFailure(compare(e, a));
+	}
+	
+	function testArrayLength() {
+		var a = [1,2,3];
+		var e = new ArrayLength(3);
+		assertSuccess(compare(e, a));
+
+		var a = [1,2,3,4];
+		var e = new ArrayLength(3);
+		assertFailure(compare(e, a));
+	}
+	
+	function testObjectContainsKeys() {
+		var a = {a: 1, b: '2'}
+		var e = new ObjectContainsKeys(['a', 'b']);
+		assertSuccess(compare(e, a));
+
+		var a = {a: 1, c: '2'}
+		var e = new ObjectContainsKeys(['a', 'b']);
+		assertFailure(compare(e, a));
+	}
+	
+	function testAnything() {
+		var a = null;
+		var e = Anything.instance;
+		assertSuccess(compare(e, a));
+
+		var a = [1,2,3,4];
+		var e = Anything.instance;
+		assertSuccess(compare(e, a));
+	}
+	
 	function assertSuccess(outcome:Outcome<Noise, Error>, ?pos:haxe.PosInfos) {
 		switch outcome {
 			case Success(_): assertTrue(true, pos);
@@ -241,21 +272,3 @@ class Bar<T> {
 	}
 }
 
-class ArrayContains implements deepequal.CustomCompare {
-	var items:Array<Dynamic>;
-	public function new(items) {
-		this.items = items;
-	}
-	public function check(other:Dynamic, compare:Dynamic->Dynamic->Outcome<Noise, Error>) {
-		if(!Std.is(other, Array)) return Failure(new Error('Expected array but got $other'));
-		for(i in items) {
-			var matched = false;
-			for(o in (other:Array<Dynamic>)) switch compare(i, o) {
-				case Success(_): matched = true; break;
-				case Failure(_):
-			}
-			if(!matched) return Failure(new Error('Cannot find $i in $other'));
-		}
-		return Success(Noise);
-	}
-}
