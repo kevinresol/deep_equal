@@ -241,6 +241,36 @@ class RunTests extends TestCase {
 		var a = [1,2,3,4];
 		var e = Anything.instance;
 		assertSuccess(compare(e, a));
+		
+		var a = [1,2,3,4];
+		var e = [for(i in 0...4) Anything.instance]; // essentially same as ArrayLength
+		assertSuccess(compare(e, a));
+		
+		var a = [1,2,3];
+		var e = [for(i in 0...4) Anything.instance]; // essentially same as ArrayLength
+		assertFailure(compare(e, a));
+	}
+	
+	function testEnumByName() {
+		var a = Success(1);
+		var e = new EnumByName(Outcome, 'Success');
+		assertSuccess(compare(e, a));
+		
+		var a = Success(1);
+		var e = new EnumByName(Outcome, 'Success', [1]);
+		assertSuccess(compare(e, a));
+		
+		var a = Success(1);
+		var e = new EnumByName(Outcome, 'Success', [2]);
+		assertFailure(compare(e, a));
+		
+		var a = Success(1);
+		var e = new EnumByName(FakeOutcome, 'Success');
+		assertFailure(compare(e, a));
+		
+		var a = Success(1);
+		var e = new EnumByName(Outcome, 'Failure');
+		assertFailure(compare(e, a));
 	}
 	
 	function assertSuccess(outcome:Outcome<Noise, Error>, ?pos:haxe.PosInfos) {
