@@ -271,6 +271,10 @@ class RunTests extends TestCase {
 		var a = Success(1);
 		var e = new EnumByName(Outcome, 'Failure');
 		assertFailure(compare(e, a));
+		
+		var a = 'Success';
+		var e = new EnumByName(Outcome, 'Failure');
+		assertFailure(compare(e, a));
 	}
 	
 	function assertSuccess(outcome:Outcome<Noise, Error>, ?pos:haxe.PosInfos) {
