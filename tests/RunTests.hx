@@ -129,6 +129,10 @@ class RunTests extends TestCase {
 		var a = Success('foo');
 		var e = Failure('foo');
 		assertFailure(compare(e, a));
+		
+		var a = FakeOutcome.Success(1);
+		var e = Outcome.Success(1);
+		assertFailure(compare(e, a));
 	}
 	
 	function testCustom() {

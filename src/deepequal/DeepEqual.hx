@@ -65,12 +65,11 @@ class DeepEqual {
 			
 		} else if(Reflect.isEnumValue(e)) {
 		
-			if(!Reflect.isEnumValue(a)) return fail('Expected enum value but got $a', pos);
+			var ecls = Type.getEnum(e);
+			var acls = Type.getEnum(a);
+			if(ecls != acls) return fail('Expected enum value of ${Type.getEnumName(ecls)} but got $a', pos);
 			var a:EnumValue = cast a;
 			var e:EnumValue = cast e;
-			var type = Type.getEnum(e);
-			if(!Std.is(a, type)) return fail('Expected ${Type.getEnumName(type)} but got $a', pos);
-			
 			switch [e.getName(), a.getName()] {
 				case [e, a] if(e != a): return fail('Expected $e but got $a');
 				default:
