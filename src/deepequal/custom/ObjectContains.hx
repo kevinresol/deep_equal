@@ -15,9 +15,11 @@ class ObjectContains implements deepequal.CustomCompare {
 		if(!Reflect.isObject(other)) return Failure(new Error('Expected object but got $other'));
 		for(field in Reflect.fields(expected)) {
 			if(!Reflect.hasField(other, field)) return Failure(new Error('Cannot find field $field in $other'));
-			switch compare(Reflect.field(expected, field), Reflect.field(other, field)) {
-				case Success(_):
-				case Failure(f): return Failure(f);
+			var e = Reflect.field(expected, field);
+			var a = Reflect.field(other, field);
+			switch compare(e, a) {
+				case Failure(f): return Failure(Error.withData('Expected field $field to be $e but got $a', f));
+				default:
 			}
 		}
 		return Success(Noise);

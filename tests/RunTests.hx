@@ -336,7 +336,7 @@ class RunTests extends TestCase {
 	function assertSuccess(outcome:Outcome<Noise, Error>, ?pos:haxe.PosInfos) {
 		switch outcome {
 			case Success(_): assertTrue(true, pos);
-			case Failure(e): trace(e.message, e.data); assertTrue(false, pos);
+			case Failure(e): trace(e.message); trace(e.data); assertTrue(false, pos);
 		}
 	}
 	
