@@ -22,4 +22,7 @@ class ObjectContains implements deepequal.CustomCompare {
 		}
 		return Success(Noise);
 	}
+	@:keep
+	public function toString()
+		return 'ObjectContains($expected)';
 }

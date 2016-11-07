@@ -23,4 +23,7 @@ class EnumByName implements deepequal.CustomCompare {
 		if(params != null) return compare(params, (other:EnumValue).getParameters());
 		return Success(Noise);
 	}
+	@:keep
+	public function toString()
+		return 'EnumByName($enm, $name, $params)';
 }

@@ -25,4 +25,7 @@ class ArrayContains implements deepequal.CustomCompare {
 		}
 		return Success(Noise);
 	}
+	@:keep
+	public function toString()
+		return 'ArrayContains($items)';
 }

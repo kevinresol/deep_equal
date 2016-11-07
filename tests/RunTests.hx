@@ -314,6 +314,25 @@ class RunTests extends TestCase {
 		
 	}
 	
+	function testStringStartsWith() {
+		var a = 'Success';
+		var e = new StringStartsWith('Succ');
+		assertSuccess(compare(e, a));
+		
+		var a = 'Success';
+		var e = new StringStartsWith('succ');
+		assertFailure(compare(e, a));
+		
+		var a = 'Success';
+		var e = new StringStartsWith('Success');
+		assertSuccess(compare(e, a));
+		
+		var a = 'Success';
+		var e = new StringStartsWith('Failure');
+		assertFailure(compare(e, a));
+		
+	}
+	
 	function assertSuccess(outcome:Outcome<Noise, Error>, ?pos:haxe.PosInfos) {
 		switch outcome {
 			case Success(_): assertTrue(true, pos);

@@ -16,4 +16,7 @@ class Regex implements deepequal.CustomCompare {
 		if(!regex.match(other)) return Failure(new Error('Cannot match $other with the required regex: $regex'));
 		return Success(Noise);
 	}
+	@:keep
+	public function toString()
+		return 'Regex($regex)';
 }

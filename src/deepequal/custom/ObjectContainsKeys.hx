@@ -16,4 +16,7 @@ class ObjectContainsKeys implements deepequal.CustomCompare {
 		for(key in keys) if(!Reflect.hasField(other, key)) return Failure(new Error('Cannot find key $key in $other'));
 		return Success(Noise);
 	}
+	@:keep
+	public function toString()
+		return 'ObjectContainsKeys($keys)';
 }

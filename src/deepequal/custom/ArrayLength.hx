@@ -15,4 +15,7 @@ class ArrayLength implements deepequal.CustomCompare {
 		if(!Std.is(other, Array)) return Failure(new Error('Expected array but got $other'));
 		return (other:Array<Dynamic>).length == length ? Success(Noise) : Failure(new Error('Expected array of length $length but got $other'));
 	}
+	@:keep
+	public function toString()
+		return 'ArrayLength($length)';
 }
