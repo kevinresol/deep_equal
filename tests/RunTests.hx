@@ -295,6 +295,25 @@ class RunTests extends TestCase {
 		assertFailure(compare(e, a));
 	}
 	
+	function testRegex() {
+		var a = 'Success';
+		var e = new Regex(~/Suc/);
+		assertSuccess(compare(e, a));
+		
+		var a = 'Success';
+		var e = new Regex(~/suc/);
+		assertFailure(compare(e, a));
+		
+		var a = 'Success';
+		var e = new Regex(~/suc/i);
+		assertSuccess(compare(e, a));
+		
+		var a = 'Success';
+		var e = new Regex(~/Suc.*/);
+		assertSuccess(compare(e, a));
+		
+	}
+	
 	function assertSuccess(outcome:Outcome<Noise, Error>, ?pos:haxe.PosInfos) {
 		switch outcome {
 			case Success(_): assertTrue(true, pos);
