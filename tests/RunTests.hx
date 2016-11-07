@@ -223,6 +223,24 @@ class RunTests extends TestCase {
 		assertFailure(compare(e, a));
 	}
 	
+	function testObjectContains() {
+		var a = {a: 1, b: '2'}
+		var e = new ObjectContains({a: 1});
+		assertSuccess(compare(e, a));
+		
+		var a = {a: 1, b: '2'}
+		var e = new ObjectContains({b: 2});
+		assertFailure(compare(e, a));
+		
+		var a = {a: 1, b: '2'}
+		var e = new ObjectContains({b: '2'});
+		assertSuccess(compare(e, a));
+		
+		var a = {a: 1, c: '2'}
+		var e = new ObjectContains({a:1, b:2});
+		assertFailure(compare(e, a));
+	}
+	
 	function testObjectContainsKeys() {
 		var a = {a: 1, b: '2'}
 		var e = new ObjectContainsKeys(['a', 'b']);
