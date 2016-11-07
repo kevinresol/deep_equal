@@ -18,7 +18,7 @@ class ObjectContains implements deepequal.CustomCompare {
 			var e = Reflect.field(expected, field);
 			var a = Reflect.field(other, field);
 			switch compare(e, a) {
-				case Failure(f): return Failure(Error.withData('Expected field $field to be $e but got $a', f));
+				case Failure(f): return Failure(Error.withData('Expected field $field to be ${Std.string(e)} but got ${Std.string(a)}', f));
 				default:
 			}
 		}
