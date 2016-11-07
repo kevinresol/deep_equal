@@ -58,3 +58,24 @@ class ArrayContains implements deepequal.CustomCompare {
 }
 
 ```
+
+### Here are some more use case examples:
+
+#### Assert array of certain length without caring about the contents
+```haxe
+var actual = [1,2,3];
+compare(new ArrayOfLength(3), actual)` // or;
+compare([for(i in 0...3) new Anything()], actual);
+```
+  
+#### Assert object with certain contents without doing a perfect match
+```haxe
+var actual = {a:1, b:2}
+compare(new ObjectContains({a: 1}), actual);
+```
+
+#### Assert an enum value and matches its first parameter as regex
+```haxe
+var actual = Bar("MyString", 1); // suppose defined `enum Foo {Bar(s:String, i:Int)}`
+compare(new EnumByName(Foo, 'Bar', [new Regex(~/MyS.*/), new Anything()]), actual);
+```

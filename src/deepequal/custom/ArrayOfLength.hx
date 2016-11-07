@@ -6,7 +6,7 @@ import deepequal.Noise;
 /**
 	Checks if target is an array and of the required length
 **/
-class ArrayLength implements deepequal.CustomCompare {
+class ArrayOfLength implements deepequal.CustomCompare {
 	var length:Int;
 	public function new(length) {
 		this.length = length;

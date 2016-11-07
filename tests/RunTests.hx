@@ -213,13 +213,13 @@ class RunTests extends TestCase {
 		assertFailure(compare(e, a));
 	}
 	
-	function testArrayLength() {
+	function testArrayOfLength() {
 		var a = [1,2,3];
-		var e = new ArrayLength(3);
+		var e = new ArrayOfLength(3);
 		assertSuccess(compare(e, a));
 
 		var a = [1,2,3,4];
-		var e = new ArrayLength(3);
+		var e = new ArrayOfLength(3);
 		assertFailure(compare(e, a));
 	}
 	
