@@ -2,6 +2,7 @@ package deepequal.custom;
 
 import deepequal.Outcome;
 import deepequal.Noise;
+import deepequal.Stringifier.*;
 
 /** 
 	Checks if targets is an array and contains the required elements
@@ -14,14 +15,14 @@ class ArrayContains implements deepequal.CustomCompare {
 		this.items = items;
 	}
 	public function check(other:Dynamic, compare:Dynamic->Dynamic->Result) {
-		if(!Std.is(other, Array)) return Failure({message: 'Expected array but got $other', path: []});
+		if(!Std.is(other, Array)) return Failure({message: 'Expected array but got ${stringify(other)}', path: []});
 		for(i in items) {
 			var matched = false;
 			for(o in (other:Array<Dynamic>)) switch compare(i, o) {
 				case Success(_): matched = true; break;
 				case Failure(_):
 			}
-			if(!matched) return Failure({message: 'Cannot find $i in $other', path:[]});
+			if(!matched) return Failure({message: 'Cannot find $i in ${stringify(other)}', path:[]});
 		}
 		return Success(Noise);
 	}

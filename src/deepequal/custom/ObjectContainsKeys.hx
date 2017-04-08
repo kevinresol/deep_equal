@@ -2,6 +2,7 @@ package deepequal.custom;
 
 import deepequal.Outcome;
 import deepequal.Noise;
+import deepequal.Stringifier.*;
 
 /**
 	Checks if target is an object (as defined by Reflect.isObject) and contains the required fields
@@ -12,8 +13,8 @@ class ObjectContainsKeys implements deepequal.CustomCompare {
 		this.keys = keys;
 	}
 	public function check(other:Dynamic, compare:Dynamic->Dynamic->Result) {
-		if(!Reflect.isObject(other)) return Failure({message: 'Expected object but got $other', path: []});
-		for(key in keys) if(!Reflect.hasField(other, key)) return Failure({message: 'Cannot find key $key in $other', path: []});
+		if(!Reflect.isObject(other)) return Failure({message: 'Expected object but got ${stringify(other)}', path: []});
+		for(key in keys) if(!Reflect.hasField(other, key)) return Failure({message: 'Cannot find key $key', path: []});
 		return Success(Noise);
 	}
 	@:keep

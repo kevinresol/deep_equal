@@ -6,6 +6,7 @@ import haxe.io.Bytes;
 import deepequal.Outcome;
 import deepequal.Noise;
 import deepequal.Error;
+import deepequal.Stringifier.*;
 
 class DeepEqual {
 	public static function compare(e:Dynamic, a:Dynamic, ?pos:haxe.PosInfos) {
@@ -21,6 +22,7 @@ class DeepEqual {
 	static function reconstructPath(path:Array<Path>) {
 		var buf = new StringBuf();
 		for(p in path) switch p {
+			case EnumParam(i): buf.add('(enumParam:$i)');
 			case Index(i): buf.add('[$i]');
 			case Field(k): buf.add('.$k');
 		}
@@ -100,32 +102,43 @@ private class Compare {
 		
 			var ecls = Type.getEnum(e);
 			var acls = Type.getEnum(a);
-			if(ecls != acls) return fail('Expected enum value of ${Type.getEnumName(ecls)} but got $a');
+			if(ecls != acls) return return fail('Expected enum ${Type.getEnumName(ecls)} but got ${Type.getEnumName(acls)}');
 			var a:EnumValue = cast a;
 			var e:EnumValue = cast e;
 			switch [e.getName(), a.getName()] {
-				case [e, a] if(e != a): return mismatch(e, a);
+				case [en, an] if(en != an): return fail('Expected enum constructor $en but got $an');
 				default:
 			} 
-			return comparer(a.getParameters(), e.getParameters());
+			return switch comparer(a.getParameters(), e.getParameters()) {
+				case Success(_): Success(Noise);
+				case Failure(f):
+					switch f.path.pop() {
+						case Index(i): f.path.push(EnumParam(i));
+						default:
+					}
+					Failure(f);
+			}
 			
 		} else if(Std.is(e, Bytes)) {
 			
 			var e:Bytes = e;
 			var a:Bytes = a;
 			if(e.length != a.length) return fail('Expected bytes of length ${e.length} but got ${a.length}');
-			for(i in 0...e.length) if(e.get(i) != a.get(i)) return fail('Expected bytes ${e.toHex()} but got ${a.toHex()}');
+			for(i in 0...e.length) if(e.get(i) != a.get(i)) return mismatch(e, a);
 			return success();
 			
 		} else if(Type.getClass(e) != null) {
 			
 			var ecls = Type.getClass(e);
 			var acls = Type.getClass(a);
-			if(ecls != acls) return fail('Expected class instance of ${Type.getClassName(ecls)} but got $a');
+			if(ecls != acls) return fail('Expected class instance of ${Type.getClassName(ecls)} but got ${Type.getClassName(acls)}');
 			for(key in Type.getInstanceFields(ecls)) {
+				path.push(Field(key));
 				switch comparer(Reflect.getProperty(e, key), Reflect.getProperty(a, key)) {
-					case Failure(f): return fail(f.message);
-					default:
+					case Success(_): path.pop();
+					case Failure(f):
+						path = path.concat(f.path);
+						return fail(f.message);
 				}
 			}
 			return success();
@@ -194,10 +207,4 @@ private class Compare {
 		}
 	}
 	
-	function stringify(v:Dynamic):String {
-		return
-			if(Std.is(v, Date)) DateTools.format(v, '%F %T');
-			else if(Int64.is(v)) Int64.toStr(v);
-			else haxe.Json.stringify(v);
-	}
 }

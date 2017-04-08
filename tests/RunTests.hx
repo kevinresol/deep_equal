@@ -125,15 +125,15 @@ class RunTests extends TestCase {
 		
 		var a = Success('foo');
 		var e = Success('f');
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected "foo" but got "f" @ v(enumParam:0)');
 		
 		var a = Success('foo');
 		var e = Failure('foo');
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected enum constructor Failure but got Success @ v');
 		
 		var a = FakeOutcome.Success(1);
 		var e = Outcome.Success(1);
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected enum deepequal.Outcome but got FakeOutcome @ v');
 	}
 	
 	function testClass() {
@@ -151,15 +151,15 @@ class RunTests extends TestCase {
 
 		var a = new Foo(1);
 		var e = new Foo(2);
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected 2 but got 1 @ v.value');
 		
 		var a = new Foo(1);
 		var e = new Bar(1);
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected class instance of Bar but got Foo @ v');
 		
 		var a = new Foo(1);
 		var e = new Bar(2);
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected class instance of Bar but got Foo @ v');
 	}
 	
 	function testBytes() {
@@ -174,11 +174,11 @@ class RunTests extends TestCase {
 		
 		var a = Bytes.alloc(10);
 		var e = Bytes.alloc(20);
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected bytes of length 20 but got 10 @ v');
 		
-		var a = Bytes.ofString('abc');
-		var e = Bytes.ofString('def');
-		assertFailure(compare(e, a));
+		var a = Bytes.ofString('xyz');
+		var e = Bytes.ofString('abc');
+		assertFailure(compare(e, a), 'Expected bytes(hex):616263 but got bytes(hex):78797a @ v');
 		
 		
 	}
@@ -210,7 +210,7 @@ class RunTests extends TestCase {
 
 		var a = [1,2,3,4];
 		var e = new ArrayContains([3,5]);
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Cannot find 5 in [1,2,3,4] @ v');
 	}
 	
 	function testArrayOfLength() {
@@ -220,7 +220,7 @@ class RunTests extends TestCase {
 
 		var a = [1,2,3,4];
 		var e = new ArrayOfLength(3);
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected array of length 3 but got 4 @ v');
 	}
 	
 	function testObjectContains() {
@@ -230,7 +230,7 @@ class RunTests extends TestCase {
 		
 		var a = {a: 1, b: '2'}
 		var e = new ObjectContains({b: 2});
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected 2 but got "2" @ v.b');
 		
 		var a = {a: 1, b: '2'}
 		var e = new ObjectContains({b: '2'});
@@ -238,7 +238,7 @@ class RunTests extends TestCase {
 		
 		var a = {a: 1, c: '2'}
 		var e = new ObjectContains({a:1, b:2});
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Cannot find field b @ v');
 	}
 	
 	function testObjectContainsKeys() {
@@ -248,7 +248,7 @@ class RunTests extends TestCase {
 
 		var a = {a: 1, c: '2'}
 		var e = new ObjectContainsKeys(['a', 'b']);
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Cannot find key b @ v');
 	}
 	
 	function testAnything() {
@@ -266,7 +266,7 @@ class RunTests extends TestCase {
 		
 		var a = [1,2,3];
 		var e = [for(i in 0...4) new Anything()]; // essentially same as ArrayLength
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected array of length 4 but got 3 @ v');
 	}
 	
 	function testEnumByName() {
