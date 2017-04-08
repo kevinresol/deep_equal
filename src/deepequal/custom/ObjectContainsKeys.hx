@@ -11,9 +11,9 @@ class ObjectContainsKeys implements deepequal.CustomCompare {
 	public function new(keys) {
 		this.keys = keys;
 	}
-	public function check(other:Dynamic, compare:Dynamic->Dynamic->Outcome<Noise, Error>) {
-		if(!Reflect.isObject(other)) return Failure(new Error('Expected object but got $other'));
-		for(key in keys) if(!Reflect.hasField(other, key)) return Failure(new Error('Cannot find key $key in $other'));
+	public function check(other:Dynamic, compare:Dynamic->Dynamic->Result) {
+		if(!Reflect.isObject(other)) return Failure({message: 'Expected object but got $other', path: []});
+		for(key in keys) if(!Reflect.hasField(other, key)) return Failure({message: 'Cannot find key $key in $other', path: []});
 		return Success(Noise);
 	}
 	@:keep

@@ -16,15 +16,15 @@ class EnumByName implements deepequal.CustomCompare {
 		this.name = name;
 		this.params = params;
 	}
-	public function check(other:Dynamic, compare:Dynamic->Dynamic->Outcome<Noise, Error>) {
+	public function check(other:Dynamic, compare:Dynamic->Dynamic->Result) {
 		var oenm = Type.getEnum(other);
-		if(enm != oenm) return Failure(new Error('Expected enum of ${Type.getEnumName(enm)} but got $other'));
+		if(enm != oenm) return Failure({message: 'Expected enum of ${Type.getEnumName(enm)} but got $other', path: []});
 		switch compare(name, (other:EnumValue).getName()) {
-			case Failure(f): return Failure(Error.withData('Expected enum named $name but got $other', f));
+			case Failure(f): return Failure({message: 'Expected enum named $name but got $other', path: []});
 			default:
 		}
 		if(params != null) switch compare(params, (other:EnumValue).getParameters()) {
-			case Failure(f): return Failure(Error.withData('Unmatched enum parameters in $other', f));
+			case Failure(f): return Failure({message: 'Unmatched enum parameters in $other', path: []});
 			default:
 		}
 		return Success(Noise);

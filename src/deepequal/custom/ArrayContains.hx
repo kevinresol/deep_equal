@@ -13,15 +13,15 @@ class ArrayContains implements deepequal.CustomCompare {
 	public function new(items) {
 		this.items = items;
 	}
-	public function check(other:Dynamic, compare:Dynamic->Dynamic->Outcome<Noise, Error>) {
-		if(!Std.is(other, Array)) return Failure(new Error('Expected array but got $other'));
+	public function check(other:Dynamic, compare:Dynamic->Dynamic->Result) {
+		if(!Std.is(other, Array)) return Failure({message: 'Expected array but got $other', path: []});
 		for(i in items) {
 			var matched = false;
 			for(o in (other:Array<Dynamic>)) switch compare(i, o) {
 				case Success(_): matched = true; break;
 				case Failure(_):
 			}
-			if(!matched) return Failure(new Error('Cannot find $i in $other'));
+			if(!matched) return Failure({message: 'Cannot find $i in $other', path:[]});
 		}
 		return Success(Noise);
 	}

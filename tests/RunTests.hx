@@ -29,15 +29,15 @@ class RunTests extends TestCase {
 		
 		var a = {a:1, b:2};
 		var e = {a:1, c:2};
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected 2 but got null @ v.c');
 		
 		var a = {a:1, b:2};
 		var e = {a:1, b:3};
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected 3 but got 2 @ v.b');
 		
 		var a = {a:1, b:2};
 		var e = {a:1, b:'2'};
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected "2" but got 2 @ v.b');
 	}
 	
 	function testArrayOfObjects() {
@@ -47,11 +47,11 @@ class RunTests extends TestCase {
 		
 		var a = [{a:1, b:2}];
 		var e = [{a:1, c:2}];
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected 2 but got null @ v[0].c');
 		
 		var a = [{a:1, b:2}];
 		var e = [{a:1, b:3}];
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected 3 but got 2 @ v[0].b');
 	}
 	
 	function testArray() {
@@ -61,11 +61,11 @@ class RunTests extends TestCase {
 		
 		var a = [0.1];
 		var e = [1.1];
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected 1.1 but got 0.1 @ v[0]');
 		
 		var a = [0.1, 0.2];
 		var e = [0.1, 0.2, 0.3];
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected array of length 3 but got 2 @ v');
 	}
 	
 	function testFloat() {
@@ -75,7 +75,7 @@ class RunTests extends TestCase {
 		
 		var a = 0.1;
 		var e = 1.1;
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected 1.1 but got 0.1 @ v');
 	}
 	
 	function testInt() {
@@ -85,7 +85,7 @@ class RunTests extends TestCase {
 		
 		var a = 0;
 		var e = 1;
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected 1 but got 0 @ v');
 	}
 	
 	function testString() {
@@ -95,7 +95,7 @@ class RunTests extends TestCase {
 		
 		var a = 'actual';
 		var e = 'expected';
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected "expected" but got "actual" @ v');
 	}
 	
 	function testDate() {
@@ -105,7 +105,7 @@ class RunTests extends TestCase {
 		
 		var a = new Date(2016, 1, 1, 1, 1, 2);
 		var e = new Date(2016, 1, 1, 1, 1, 1);
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected 2016-02-01 01:01:01 but got 2016-02-01 01:01:02 @ v');
 	}
 	
 	function testInt64() {
@@ -115,7 +115,7 @@ class RunTests extends TestCase {
 		
 		var a = Int64.make(1, 2);
 		var e = Int64.make(1, 3);
-		assertFailure(compare(e, a));
+		assertFailure(compare(e, a), 'Expected 4294967299 but got 4294967298 @ v');
 	}
 	
 	function testEnum() {

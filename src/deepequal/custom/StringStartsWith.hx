@@ -11,9 +11,9 @@ class StringStartsWith implements deepequal.CustomCompare {
 	public function new(s) {
 		this.s = s;
 	}
-	public function check(other:Dynamic, compare:Dynamic->Dynamic->Outcome<Noise, Error>) {
-		if(!Std.is(other, String)) return Failure(new Error('Expected string but got $other'));
-		if(!StringTools.startsWith(other, s)) return Failure(new Error('Expected string starting with $s but got $other'));
+	public function check(other:Dynamic, compare:Dynamic->Dynamic->Result) {
+		if(!Std.is(other, String)) return Failure({message: 'Expected string but got $other', path: []});
+		if(!StringTools.startsWith(other, s)) return Failure({message: 'Expected string starting with $s but got $other', path: []});
 		return Success(Noise);
 	}
 	@:keep

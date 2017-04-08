@@ -11,9 +11,9 @@ class Regex implements deepequal.CustomCompare {
 	public function new(regex) {
 		this.regex = regex;
 	}
-	public function check(other:Dynamic, compare:Dynamic->Dynamic->Outcome<Noise, Error>) {
-		if(!Std.is(other, String)) return Failure(new Error('Expected string but got $other'));
-		if(!regex.match(other)) return Failure(new Error('Cannot match $other with the required regex: $regex'));
+	public function check(other:Dynamic, compare:Dynamic->Dynamic->Result) {
+		if(!Std.is(other, String)) return Failure({message: 'Expected string but got $other', path: []});
+		if(!regex.match(other)) return Failure({message: 'Cannot match $other with the required regex: $regex', path: []});
 		return Success(Noise);
 	}
 	@:keep
