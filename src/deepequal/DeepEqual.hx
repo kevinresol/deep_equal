@@ -12,7 +12,6 @@ class DeepEqual {
 	public static function compare(e:Dynamic, a:Dynamic, ?pos:haxe.PosInfos) {
 		return switch new Compare(e, a).compare() {
 			case Failure(f):
-				// display a top-level message together with the internal comparison result
 				Failure(new Error(f.message + ' @ v' + reconstructPath(f.path), pos));
 			case Success(s):
 				Success(s);
