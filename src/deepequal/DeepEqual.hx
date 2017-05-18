@@ -3,10 +3,13 @@ package deepequal;
 import haxe.Int64;
 import haxe.PosInfos;
 import haxe.io.Bytes;
+import haxe.Constraints;
 import deepequal.Outcome;
 import deepequal.Noise;
 import deepequal.Error;
 import deepequal.Stringifier.*;
+
+using Lambda;
 
 class DeepEqual {
 	public static function compare(e:Dynamic, a:Dynamic, ?pos:haxe.PosInfos) {
@@ -24,6 +27,7 @@ class DeepEqual {
 			case EnumParam(i): buf.add('(enumParam:$i)');
 			case Index(i): buf.add('[$i]');
 			case Field(k): buf.add('.$k');
+			case Key(k): buf.add('[$k]');
 		}
 		return buf.toString();
 	}
@@ -126,12 +130,46 @@ private class Compare {
 			for(i in 0...e.length) if(e.get(i) != a.get(i)) return mismatch(e, a);
 			return success();
 			
+		} else if(Std.is(e, IMap)) {
+			
+			if(!Std.is(a, IMap)) return fail('Expected map but got $a');
+			
+			var emap:IMap<Dynamic, Dynamic> = e;
+			var amap:IMap<Dynamic, Dynamic> = a;
+			
+			var ekeys = [for(k in emap.keys()) k];
+			var akeys = [for(k in amap.keys()) k];
+			switch akeys.length {
+				case len if(len != ekeys.length): return fail('Expected ${ekeys.length} field(s) but got $len');
+				default:
+					ekeys.sort(Reflect.compare);
+					akeys.sort(Reflect.compare);
+					switch comparer(ekeys, akeys) {
+						case Success(_):
+						case Failure({message: m, path: p}):
+							path = path.concat(p);
+							return fail('Map keys mismatch: $m');
+					}
+			} 
+			for(key in ekeys) {
+				
+				path.push(Key(key));
+				switch comparer(emap.get(key), amap.get(key)) {
+					case Success(_): path.pop();
+					case Failure({message: m, path: p}):
+						path = path.concat(p);
+						return fail(m);
+				}
+			}
+			return success();
+			
 		} else if(Type.getClass(e) != null) {
 			
 			var ecls = Type.getClass(e);
 			var acls = Type.getClass(a);
 			if(ecls != acls) return fail('Expected class instance of ${Type.getClassName(ecls)} but got ${Type.getClassName(acls)}');
 			for(key in Type.getInstanceFields(ecls)) {
+				if(Reflect.isFunction(Reflect.field(ecls, key))) continue;
 				path.push(Field(key));
 				switch comparer(Reflect.getProperty(e, key), Reflect.getProperty(a, key)) {
 					case Success(_): path.pop();
@@ -161,6 +199,7 @@ private class Compare {
 				default:
 			} 
 			for(key in keys) {
+				
 				path.push(Field(key));
 				switch comparer(Reflect.field(e, key), Reflect.field(a, key)) {
 					case Success(_): path.pop();
@@ -173,7 +212,7 @@ private class Compare {
 			
 		} else {
 			
-			throw 'Unhandled case'; // if anyone reaches this block, please file an issue
+			throw 'Unhandled type: ${Type.typeof(e)} ($e)'; // if anyone reaches this block, please file an issue
 			
 		}
 	}

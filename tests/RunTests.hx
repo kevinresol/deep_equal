@@ -118,6 +118,24 @@ class RunTests extends TestCase {
 		assertFailure(compare(e, a), 'Expected 4294967299 but got 4294967298 @ v');
 	}
 	
+	function testMap() {
+		var a = [1 => 'a', 2 => 'b'];
+		var e = [1 => 'a', 2 => 'b'];
+		assertSuccess(compare(e, a));
+		
+		var a = [1 => 'a'];
+		var e = [1 => 'a', 2 => 'b'];
+		assertFailure(compare(e, a), 'Expected 2 field(s) but got 1 @ v');
+		
+		var a = [1 => 'a', 3 => 'c'];
+		var e = [1 => 'a', 2 => 'b'];
+		assertFailure(compare(e, a), 'Map keys mismatch: Expected 2 but got 3 @ v[1]');
+		
+		var a = [1 => 'a', 2 => 'b'];
+		var e = ['1' => 'a', '2' => 'b'];
+		assertFailure(compare(e, a), 'Map keys mismatch: Expected "1" but got 1 @ v[0]');
+	}
+	
 	function testEnum() {
 		var a = Success('foo');
 		var e = Success('foo');

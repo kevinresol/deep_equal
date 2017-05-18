@@ -4,4 +4,5 @@ enum Path {
 	EnumParam(i:Int);
 	Index(i:Int);
 	Field(n:String);
+	Key(n:Any);
 }
