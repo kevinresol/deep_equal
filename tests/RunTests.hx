@@ -136,6 +136,20 @@ class RunTests extends TestCase {
 		assertFailure(compare(e, a), 'Map keys mismatch: Expected "1" but got 1 @ v[0]');
 	}
 	
+	function testFunction() {
+		var a = main;
+		var e = main;
+		assertSuccess(compare(e, a));
+		
+		var a = testFunction;
+		var e = testFunction;
+		assertSuccess(compare(e, a));
+		
+		var a = function() {};
+		var e = function() {};
+		assertFailure(compare(e, a));
+	}
+	
 	function testEnum() {
 		var a = Success('foo');
 		var e = Success('foo');

@@ -163,6 +163,12 @@ private class Compare {
 			}
 			return success();
 			
+		} else if(Reflect.isFunction(e)) {
+		
+			if(!Reflect.isFunction(a)) return fail('Expected function but got $a');
+			if(!Reflect.compareMethods(e, a)) return fail('The two functions are not equal');
+			return success();
+			
 		} else if(Type.getClass(e) != null) {
 			
 			var ecls = Type.getClass(e);
