@@ -9,6 +9,8 @@ import deepequal.Outcome;
 import deepequal.Noise;
 import deepequal.Error;
 
+using StringTools;
+
 class RunTests extends TestCase {
 
 	static function main() {
@@ -16,6 +18,32 @@ class RunTests extends TestCase {
 		runner.add(new RunTests());
 		
 		travix.Logger.exit(runner.run() ? 0 : 500);
+	}
+	
+	function testNull() {
+		var a = null;
+		var e = null;
+		assertSuccess(compare(e, a));
+		
+		var a = null;
+		var e = 1;
+		assertFailure(compare(e, a), 'Expected 1 but got null @ v');
+		
+		var a = null;
+		var e = Success('foo');
+		assertFailure(compare(e, a), 'Expected Success(foo) but got null @ v');
+		
+		var a = null;
+		var e = new Foo(1);
+		assertFailureRegex(compare(e, a), ~/Expected .* but got null @ v/);
+		
+		var a = null;
+		var e = Foo;
+		assertFailureRegex(compare(e, a), ~/Expected .* but got null @ v/);
+		
+		var a = 1;
+		var e = null;
+		assertFailure(compare(e, a), 'Expected null but got 1 @ v');
 	}
 	
 	function testObject() {
@@ -376,6 +404,13 @@ class RunTests extends TestCase {
 		switch outcome {
 			case Failure(f) if(message == null): assertTrue(true, pos);
 			case Failure(f): assertEquals(message, f.message, pos);
+			case Success(e): assertTrue(false, pos);
+		}
+	}
+	
+	function assertFailureRegex(outcome:Outcome<Noise, Error>, regex:EReg, ?pos:haxe.PosInfos) {
+		switch outcome {
+			case Failure(f): assertTrue(regex.match(f.message.replace('\n', '')), pos);
 			case Success(e): assertTrue(false, pos);
 		}
 	}
