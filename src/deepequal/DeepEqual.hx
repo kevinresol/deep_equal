@@ -55,6 +55,10 @@ private class Compare {
 			
 			return simple(e, a);
 			
+		} else if(a == null) {
+		
+			return fail('Expected non-null value');
+			
 		} else if(Std.is(e, CustomCompare)) {
 			
 			return (e:CustomCompare).check(a, comparer);
