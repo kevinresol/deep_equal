@@ -109,7 +109,8 @@ private class Compare {
 		
 			var ecls = Type.getEnum(e);
 			var acls = Type.getEnum(a);
-			if(ecls != acls) return return fail('Expected enum ${Type.getEnumName(ecls)} but got ${Type.getEnumName(acls)}');
+			if(acls == null) return fail('Expected enum ${Type.getEnumName(ecls)} but got ${a}');
+			if(ecls != acls) return fail('Expected enum ${Type.getEnumName(ecls)} but got ${Type.getEnumName(acls)}');
 			var a:EnumValue = cast a;
 			var e:EnumValue = cast e;
 			switch [e.getName(), a.getName()] {
