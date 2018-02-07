@@ -117,7 +117,7 @@ private class Compare {
 				case [en, an] if(en != an): return fail('Expected enum constructor $en but got $an');
 				default:
 			} 
-			return switch comparer(a.getParameters(), e.getParameters()) {
+			return switch comparer(e.getParameters(), a.getParameters()) {
 				case Success(_): Success(Noise);
 				case Failure(f):
 					switch f.path.pop() {
