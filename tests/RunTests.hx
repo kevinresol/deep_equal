@@ -185,7 +185,7 @@ class RunTests extends TestCase {
 		
 		var a = Success('foo');
 		var e = Success('f');
-		assertFailure(compare(e, a), 'Expected "foo" but got "f" @ v(enumParam:0)');
+		assertFailure(compare(e, a), 'Expected "f" but got "foo" @ v(enumParam:0)');
 		
 		var a = Success('foo');
 		var e = Failure('foo');
