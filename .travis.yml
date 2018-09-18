@@ -17,7 +17,6 @@ install:
   - lix install haxe $HAXE_VERSION
   - lix download
 
-
 script:
   - lix run travix interp
   - lix run travix neko
