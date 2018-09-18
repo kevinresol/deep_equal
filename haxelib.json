@@ -1,16 +1,16 @@
 {
-  "name": "deep_equal",
-  "license": "MIT",
-  "tags": [
-    "deep equal",
-    "compare"
-  ],
-  "description": "Recursive comparison-by-value helper",
-  "classPath": "src",
-  "contributors": [
-    "kevinresol"
-  ],
-  "releasenote": "IMap handling",
-  "version": "0.3.0",
-  "dependencies": {}
+	"name": "deep_equal",
+	"license": "MIT",
+	"tags": [
+		"deep equal",
+		"compare"
+	],
+	"classPath": "src",
+	"description": "Recursive comparison-by-value helper",
+	"contributors": [
+		"kevinresol"
+	],
+	"releasenote": "Fixes",
+	"version": "0.3.1",
+	"dependencies": {}
 }
