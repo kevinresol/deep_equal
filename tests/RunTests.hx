@@ -421,11 +421,13 @@ class Foo<T> {
 	public function new(v:T) {
 		value = v;
 	}
+	function foo() {}
 }
 class Bar<T> {
 	var value:T;
 	public function new(v:T) {
 		value = v;
 	}
+	function bar() {}
 }
 

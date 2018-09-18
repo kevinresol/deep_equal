@@ -180,7 +180,7 @@ private class Compare {
 			var acls = Type.getClass(a);
 			if(ecls != acls) return fail('Expected class instance of ${Type.getClassName(ecls)} but got ${Type.getClassName(acls)}');
 			for(key in Type.getInstanceFields(ecls)) {
-				if(Reflect.isFunction(Reflect.field(ecls, key))) continue;
+				if(Reflect.isFunction(Reflect.field(e, key))) continue;
 				path.push(Field(key));
 				switch comparer(Reflect.getProperty(e, key), Reflect.getProperty(a, key)) {
 					case Success(_): path.pop();
