@@ -193,7 +193,7 @@ class RunTests extends TestCase {
 		
 		var a = FakeOutcome.Success(1);
 		var e = Outcome.Success(1);
-		assertFailure(compare(e, a), 'Expected enum deepequal.Outcome but got FakeOutcome @ v');
+		assertFailure(compare(e, a), 'Expected enum tink.core.Outcome but got FakeOutcome @ v');
 	}
 	
 	function testClass() {
