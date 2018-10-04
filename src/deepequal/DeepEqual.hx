@@ -92,7 +92,7 @@ private class Compare {
 			
 		} else if (Std.is(e, Array)) {
 			
-			if(!Std.is(a, Array)) return fail('Expected array but got $e');
+			if(!Std.is(a, Array)) return fail('Expected array but got $a');
 			if(a.length != e.length) return fail('Expected array of length ${e.length} but got ${a.length}');
 			for(i in 0...a.length) {
 				path.push(Index(i));
