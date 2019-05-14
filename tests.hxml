@@ -1,4 +1,4 @@
 -cp tests
 -main RunTests
 -dce full
--lib hx3compat
+-lib tink_unittest

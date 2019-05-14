@@ -1,6 +1,6 @@
 {
-    "version": "0.1.0",
-    "command": "haxelib",
+    "version": "2.0.0",
+    "command": "lix",
     "args": ["run","travix","node"],
     "problemMatcher": {
         "owner": "haxe",
@@ -14,5 +14,9 @@
             "severity": 6,
             "message": 7
         }
+    },
+    "group": {
+        "kind": "build",
+        "isDefault": true
     }
 }

@@ -10,7 +10,7 @@ os:
 
 env:
   - HAXE_VERSION=3.4.7
-  - HAXE_VERSION=latest
+  - HAXE_VERSION=nightly
   
 install:
   - npm i -g lix
@@ -25,6 +25,7 @@ script:
   - lix run travix js
   # - lix run travix flash
   - lix run travix java
+  - if [[ "$(haxe -version)" =~ ^4.* ]]; then lix run travix java -D jvm; fi
   - lix run travix cpp
   - lix run travix cs
   - lix run travix php
