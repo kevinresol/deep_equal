@@ -9,6 +9,12 @@ import deepequal.Noise;
 import deepequal.Error;
 import deepequal.Stringifier.*;
 
+#if (haxe_ver >= 4.1)
+import haxe.Int64.isInt64;
+#else
+import haxe.Int64.is as isInt64;
+#end
+
 using Lambda;
 
 class DeepEqual {
@@ -68,10 +74,10 @@ private class Compare {
 			if(!Std.is(a, String)) return mismatch(e, a);
 			return simple(e, a);
 			
-		} else if(Int64.is(e)) {
+		} else if(isInt64(e)) {
 			
 			#if !java
-			if(!Int64.is(a)) return mismatch(e, a);
+			if(!isInt64(a)) return mismatch(e, a);
 			#end
 			return if((e:Int64) == (a:Int64)) Success(Noise) else mismatch(e, a);
 			
