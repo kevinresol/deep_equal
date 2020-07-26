@@ -8,6 +8,8 @@ class Stringifier {
 			else if(Std.is(v, String) || Std.is(v, Float) || Std.is(v, Bool)) haxe.Json.stringify(v);
 			else if(Std.is(v, Date)) DateTools.format(v, '%F %T');
 			else if(Std.is(v, haxe.io.Bytes)) 'bytes(hex):' + (v:haxe.io.Bytes).toHex();
+			else if(Std.is(v, Class)) Type.getClassName(v);
+			else if(Std.is(v, Enum)) Type.getEnumName(v);
 			else Std.string(v);
 	}
 	
