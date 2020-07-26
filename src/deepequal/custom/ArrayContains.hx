@@ -2,7 +2,7 @@ package deepequal.custom;
 
 import deepequal.Outcome;
 import deepequal.Noise;
-import deepequal.Stringifier.*;
+import deepequal.Helper.*;
 
 /** 
 	Checks if targets is an array and contains the required elements

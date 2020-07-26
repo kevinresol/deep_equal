@@ -3,7 +3,7 @@ package deepequal.custom;
 import deepequal.Outcome;
 import deepequal.Noise;
 import deepequal.Path;
-import deepequal.Stringifier.*;
+import deepequal.Helper.*;
 
 /** 
 	Check if target include the required field and values  

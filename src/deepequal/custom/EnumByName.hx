@@ -19,7 +19,7 @@ class EnumByName implements deepequal.CustomCompare {
 	public function check(other:Dynamic, compare:Dynamic->Dynamic->Result) {
 		if(!Reflect.isEnumValue(other)) return return Failure({message: 'Expected $other to be an enum', path: []});
 		var oenm = Type.getEnum(other);
-		if(enm != oenm) return Failure({message: 'Expected enum of ${Type.getEnumName(enm)} but got $other', path: []});
+		if(enm != oenm) return Failure({message: 'Expected enum of ${Helper.getEnumName(enm)} but got $other', path: []});
 		switch compare(name, (other:EnumValue).getName()) {
 			case Failure(f): return Failure({message: 'Expected enum named $name but got $other', path: []});
 			default:

@@ -2,7 +2,7 @@ package deepequal.custom;
 
 import deepequal.Outcome;
 import deepequal.Noise;
-import deepequal.Stringifier.*;
+import deepequal.Helper.*;
 
 /**
 	Checks if target is an object (as defined by Reflect.isObject) and contains the required fields

@@ -7,7 +7,7 @@ import haxe.Constraints;
 import deepequal.Outcome;
 import deepequal.Noise;
 import deepequal.Error;
-import deepequal.Stringifier.*;
+import deepequal.Helper.*;
 
 using Lambda;
 
@@ -106,11 +106,11 @@ private class Compare {
 			return success();
 			
 		} else if(Reflect.isEnumValue(e)) {
-		
+			
 			var ecls = Type.getEnum(e);
 			var acls = try Type.getEnum(a) catch(e:Dynamic) null;
-			if(acls == null || !Std.is(acls, Enum)) return fail('Expected enum ${Type.getEnumName(ecls)} but got ${a}');
-			if(ecls != acls) return fail('Expected enum ${Type.getEnumName(ecls)} but got ${Type.getEnumName(acls)}');
+			if(acls == null || !Std.is(acls, Enum)) return fail('Expected enum ${Helper.getEnumName(ecls)} but got ${a}');
+			if(ecls != acls) return fail('Expected enum ${Helper.getEnumName(ecls)} but got ${Helper.getEnumName(acls)}');
 			var a:EnumValue = cast a;
 			var e:EnumValue = cast e;
 			switch [e.getName(), a.getName()] {
