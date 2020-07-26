@@ -108,7 +108,7 @@ private class Compare {
 		} else if(Reflect.isEnumValue(e)) {
 		
 			var ecls = Type.getEnum(e);
-			var acls = Type.getEnum(a);
+			var acls = try Type.getEnum(a) catch(e:Dynamic) null;
 			if(acls == null || !Std.is(acls, Enum)) return fail('Expected enum ${Type.getEnumName(ecls)} but got ${a}');
 			if(ecls != acls) return fail('Expected enum ${Type.getEnumName(ecls)} but got ${Type.getEnumName(acls)}');
 			var a:EnumValue = cast a;
@@ -177,7 +177,7 @@ private class Compare {
 		} else if(Type.getClass(e) != null) {
 			
 			var ecls = Type.getClass(e);
-			var acls = Type.getClass(a);
+			var acls = try Type.getClass(a) catch(e:Dynamic) null;
 			if(acls == null || !Std.is(acls, Class)) return fail('Expected class instance of ${Type.getClassName(ecls)} but got ${a}');
 			if(ecls != acls) return fail('Expected class instance of ${Type.getClassName(ecls)} but got ${Type.getClassName(acls)}');
 			for(key in Type.getInstanceFields(ecls)) {

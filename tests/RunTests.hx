@@ -448,8 +448,41 @@ class RunTests {
 		return asserts.done();
 	}
 	
+	public function nonClass() {
+		
+		var a = {};
+		var e = new Foo(1);
+		asserts.assert(compare(e, a).match(Failure(_)));
+		
+		var a = 1;
+		var e = new Foo(1);
+		asserts.assert(compare(e, a).match(Failure(_)));
+		
+		var a = 'foo';
+		var e = new Foo(1);
+		asserts.assert(compare(e, a).match(Failure(_)));
+		
+		var a = true;
+		var e = new Foo(1);
+		asserts.assert(compare(e, a).match(Failure(_)));
+		
+		return asserts.done();
+	}
+	
 	public function nonEnum() {
 		var a = {};
+		var e = Success(1);
+		asserts.assert(compare(e, a).match(Failure(_)));
+		
+		var a = 1;
+		var e = Success(1);
+		asserts.assert(compare(e, a).match(Failure(_)));
+		
+		var a = 'foo';
+		var e = Success(1);
+		asserts.assert(compare(e, a).match(Failure(_)));
+		
+		var a = true;
 		var e = Success(1);
 		asserts.assert(compare(e, a).match(Failure(_)));
 		
