@@ -115,6 +115,9 @@ private class Compare {
 		
 			var ecls = Type.getEnum(e);
 			var acls = Type.getEnum(a);
+			#if python
+			try Type.getEnumName(acls) catch(e:Dynamic) acls = null;
+			#end
 			if(acls == null) return fail('Expected enum ${Type.getEnumName(ecls)} but got ${a}');
 			if(ecls != acls) return fail('Expected enum ${Type.getEnumName(ecls)} but got ${Type.getEnumName(acls)}');
 			var a:EnumValue = cast a;
