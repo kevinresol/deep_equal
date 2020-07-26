@@ -1,10 +1,5 @@
 package deepequal;
 
-#if (haxe_ver >= 4.1)
-import haxe.Int64.isInt64;
-#else
-import haxe.Int64.is as isInt64;
-#end
 
 class Stringifier {
 	public static function stringify(v:Dynamic):String {
@@ -14,5 +9,14 @@ class Stringifier {
 			else if(Std.is(v, Date)) DateTools.format(v, '%F %T');
 			else if(Std.is(v, haxe.io.Bytes)) 'bytes(hex):' + (v:haxe.io.Bytes).toHex();
 			else Std.string(v);
+	}
+	
+	public static inline function isInt64(v:Dynamic):Bool {
+		return
+			#if (haxe_ver >= 4.1)
+			haxe.Int64.isInt64(v);
+			#else
+			haxe.Int64.is(v);
+			#end
 	}
 }

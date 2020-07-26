@@ -9,12 +9,6 @@ import deepequal.Noise;
 import deepequal.Error;
 import deepequal.Stringifier.*;
 
-#if (haxe_ver >= 4.1)
-import haxe.Int64.isInt64;
-#else
-import haxe.Int64.is as isInt64;
-#end
-
 using Lambda;
 
 class DeepEqual {
