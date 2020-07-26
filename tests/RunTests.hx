@@ -286,26 +286,19 @@ class RunTests {
 		
 		var a = Foo;
 		var e = Bar;
-		asserts.assertFailureRegex(compare(e, a), ~/^Expected .*Bar.* but got .*Foo.* @ v$/);
+		asserts.assertFailureRegex(compare(e, a), ~/^Expected Bar but got Foo @ v$/);
 		
 		return asserts.done();
 	}
 	
 	public function enumObj() {
-		var a = Outcome;
-		var e = Outcome;
-		asserts.assert(compare(e, a));
+		// var a = Outcome;
+		// var e = Outcome;
+		// asserts.assert(compare(e, a));
 		
 		var a = Outcome;
 		var e = haxe.ds.Option;
-		asserts.assertFailureRegex(compare(e, a), 
-			#if lua
-			// see: https://github.com/HaxeFoundation/haxe/issues/8285
-			~/^Expected .*{ 1 : haxe, 2 : ds, 3 : Option }.* but got .*{ 1 : tink, 2 : core, 3 : Outcome }.* @ v$/
-			#else
-			~/^Expected .*haxe.ds.Option.* but got .*tink.core.Outcome.* @ v$/
-			#end
-		);
+		asserts.assertFailureRegex(compare(e, a), ~/^Expected haxe.ds.Option but got tink.core.Outcome @ v$/);
 		
 		return asserts.done();
 	}
@@ -451,6 +444,14 @@ class RunTests {
 		var a = 'Success';
 		var e = new StringStartsWith('Failure');
 		asserts.assertFailure(compare(e, a), 'Expected string starting with Failure but got Success @ v');
+		
+		return asserts.done();
+	}
+	
+	public function nonEnum() {
+		var a = {};
+		var e = Success(1);
+		asserts.assert(compare(e, a).match(Failure(_)));
 		
 		return asserts.done();
 	}
