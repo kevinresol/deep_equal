@@ -13,7 +13,7 @@ class ArrayOfLength implements deepequal.CustomCompare {
 		this.length = length;
 	}
 	public function check(other:Dynamic, compare:Dynamic->Dynamic->Result) {
-		if(!Std.is(other, Array)) return Failure({message: 'Expected array but got ${stringify(other)}', path: []});
+		if(!isOfType(other, Array)) return Failure({message: 'Expected array but got ${stringify(other)}', path: []});
 		var len = (other:Array<Dynamic>).length;
 		return len == length ? Success(Noise) : Failure({message: 'Expected array of length $length but got $len', path: []});
 	}

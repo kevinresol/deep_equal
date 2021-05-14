@@ -55,7 +55,7 @@ private class Compare {
 			
 			return simple(e, a);
 			
-		} else if(Std.is(e, CustomCompare)) {
+		} else if(isOfType(e, CustomCompare)) {
 			
 			return (e:CustomCompare).check(a, comparer);
 			
@@ -63,9 +63,9 @@ private class Compare {
 		
 			return fail('Expected $e but got null');
 			
-		} else if(Std.is(e, String)) {
+		} else if(isOfType(e, String)) {
 			
-			if(!Std.is(a, String)) return mismatch(e, a);
+			if(!isOfType(a, String)) return mismatch(e, a);
 			return simple(e, a);
 			
 		} else if(isInt64(e)) {
@@ -75,24 +75,24 @@ private class Compare {
 			#end
 			return if((e:Int64) == (a:Int64)) Success(Noise) else mismatch(e, a);
 			
-		} else if(Std.is(e, Float)) {
+		} else if(isOfType(e, Float)) {
 			
-			if(!Std.is(a, Float)) return mismatch(e, a);
+			if(!isOfType(a, Float)) return mismatch(e, a);
 			return simple(e, a);
 			
-		} else if(Std.is(e, Bool)) {
+		} else if(isOfType(e, Bool)) {
 			
-			if(!Std.is(a, Bool)) return mismatch(e, a);
+			if(!isOfType(a, Bool)) return mismatch(e, a);
 			return simple(e, a);
 			
-		} else if(Std.is(e, Date)) {
+		} else if(isOfType(e, Date)) {
 			
-			if(!Std.is(a, Date)) return mismatch(e, a);
+			if(!isOfType(a, Date)) return mismatch(e, a);
 			return date(e, a);
 			
-		} else if (Std.is(e, Array)) {
+		} else if (isOfType(e, Array)) {
 			
-			if(!Std.is(a, Array)) return fail('Expected array but got $a');
+			if(!isOfType(a, Array)) return fail('Expected array but got $a');
 			if(a.length != e.length) return fail('Expected array of length ${e.length} but got ${a.length}');
 			for(i in 0...a.length) {
 				path.push(Index(i));
@@ -109,7 +109,7 @@ private class Compare {
 			
 			var ecls = Type.getEnum(e);
 			var acls = try Type.getEnum(a) catch(e:Dynamic) null;
-			if(acls == null || !Std.is(acls, Enum)) return fail('Expected enum ${Helper.getEnumName(ecls)} but got ${a}');
+			if(acls == null || !isOfType(acls, Enum)) return fail('Expected enum ${Helper.getEnumName(ecls)} but got ${a}');
 			if(ecls != acls) return fail('Expected enum ${Helper.getEnumName(ecls)} but got ${Helper.getEnumName(acls)}');
 			var a:EnumValue = cast a;
 			var e:EnumValue = cast e;
@@ -127,7 +127,7 @@ private class Compare {
 					Failure(f);
 			}
 			
-		} else if(Std.is(e, Bytes)) {
+		} else if(isOfType(e, Bytes)) {
 			
 			var e:Bytes = e;
 			var a:Bytes = a;
@@ -135,9 +135,9 @@ private class Compare {
 			for(i in 0...e.length) if(e.get(i) != a.get(i)) return mismatch(e, a);
 			return success();
 			
-		} else if(Std.is(e, IMap)) {
+		} else if(isOfType(e, IMap)) {
 			
-			if(!Std.is(a, IMap)) return fail('Expected map but got $a');
+			if(!isOfType(a, IMap)) return fail('Expected map but got $a');
 			
 			var emap:IMap<Dynamic, Dynamic> = e;
 			var amap:IMap<Dynamic, Dynamic> = a;
@@ -178,7 +178,7 @@ private class Compare {
 			
 			var ecls = Type.getClass(e);
 			var acls = try Type.getClass(a) catch(e:Dynamic) null;
-			if(acls == null || !Std.is(acls, Class)) return fail('Expected class instance of ${Type.getClassName(ecls)} but got ${a}');
+			if(acls == null || !isOfType(acls, Class)) return fail('Expected class instance of ${Type.getClassName(ecls)} but got ${a}');
 			if(ecls != acls) return fail('Expected class instance of ${Type.getClassName(ecls)} but got ${Type.getClassName(acls)}');
 			for(key in Type.getInstanceFields(ecls)) {
 				if(Reflect.isFunction(Reflect.field(e, key))) continue;
@@ -192,14 +192,14 @@ private class Compare {
 			}
 			return success();
 			
-		} else if(Std.is(e, Class)) {
+		} else if(isOfType(e, Class)) {
 			
-			if(!Std.is(a, Class)) return mismatch(e, a);
+			if(!isOfType(a, Class)) return mismatch(e, a);
 			return simple(e, a);
 			
-		} else if(Std.is(e, Enum)) {
+		} else if(isOfType(e, Enum)) {
 			
-			if(!Std.is(a, Enum)) return mismatch(e, a);
+			if(!isOfType(a, Enum)) return mismatch(e, a);
 			return simple(e, a);
 			
 		} else if(Reflect.isObject(e)) {

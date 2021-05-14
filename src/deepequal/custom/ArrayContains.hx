@@ -15,7 +15,7 @@ class ArrayContains implements deepequal.CustomCompare {
 		this.items = items;
 	}
 	public function check(other:Dynamic, compare:Dynamic->Dynamic->Result) {
-		if(!Std.is(other, Array)) return Failure({message: 'Expected array but got ${stringify(other)}', path: []});
+		if(!isOfType(other, Array)) return Failure({message: 'Expected array but got ${stringify(other)}', path: []});
 		for(i in items) {
 			var matched = false;
 			for(o in (other:Array<Dynamic>)) switch compare(i, o) {

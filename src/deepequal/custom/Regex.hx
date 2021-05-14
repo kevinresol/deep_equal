@@ -2,6 +2,7 @@ package deepequal.custom;
 
 import deepequal.Outcome;
 import deepequal.Noise;
+import deepequal.Helper.*;
 
 /**
 	Checks if target is a string and fulfills the required regex
@@ -12,7 +13,7 @@ class Regex implements deepequal.CustomCompare {
 		this.regex = regex;
 	}
 	public function check(other:Dynamic, compare:Dynamic->Dynamic->Result) {
-		if(!Std.is(other, String)) return Failure({message: 'Expected string but got $other', path: []});
+		if(!isOfType(other, String)) return Failure({message: 'Expected string but got $other', path: []});
 		if(!regex.match(other)) return Failure({message: 'Cannot match $other with the required regex: $regex', path: []});
 		return Success(Noise);
 	}
