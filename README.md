@@ -1,4 +1,6 @@
-# Deep Equal [![Build Status](https://travis-ci.org/kevinresol/deep_equal.svg?branch=master)](https://travis-ci.org/kevinresol/deep_equal)
+# Deep Equal
+
+[![Build Status](https://github.com/kevinresol/deep_equal/actions/workflows/ci.yml/badge.svg)](https://github.com/kevinresol/deep_equal/actions)
 
 Every programmer needs to compare values.
 
