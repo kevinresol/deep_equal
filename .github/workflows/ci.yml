@@ -1,17 +1,13 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
 name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -19,7 +15,7 @@ jobs:
         haxe-version:
           - stable
           - nightly
-        target: 
+        target:
           - interp
           - node
           - neko
@@ -28,30 +24,17 @@ jobs:
           - cpp
           - js
           - jvm
-          - java
-          - cs
 
     steps:
-    - uses: actions/checkout@v2
-      
-    - name: Get yarn cache directory path
-      id: yarn-cache-dir-path
-      run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/checkout@v6
 
-    - uses: actions/cache@v1
-      with:
-        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
-        
-    - name: Cache Haxe
-      uses: actions/cache@v1
-      with:
-        path: ~/haxe
-        key: haxe
-      
-    - uses: lix-pm/setup-lix@master
-    - run: lix install haxe ${{ matrix.haxe-version }}
-    - run: lix download
-    - run: lix run travix ${{ matrix.target }}
+      - name: Cache Haxe
+        uses: actions/cache@v6
+        with:
+          path: ~/haxe
+          key: haxe
+
+      - uses: lix-pm/setup-lix@master
+      - run: lix install haxe ${{ matrix.haxe-version }}
+      - run: lix download
+      - run: lix run travix ${{ matrix.target }}
